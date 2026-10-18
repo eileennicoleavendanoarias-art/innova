@@ -12,7 +12,9 @@ Haz doble clic sobre el archivo `start.bat` o ejecuta en tu terminal:
 ```bash
 python server.py
 ```
-*(Si utilizas el entorno de JetBrains u otra ruta personalizada de Python, `start.bat` lo detectará de forma automática).*
+(`start.bat` comprueba que Python pueda ejecutarse y busca instalaciones por usuario en `%USERPROFILE%\.local\bin`, además del lanzador de Python y JetBrains).
+
+> **Importante:** la tienda y el panel administrativo requieren que este servidor Python esté activo. GitHub almacena el código, pero GitHub Pages no ejecuta este backend; abre el panel desde la URL local indicada abajo después de iniciar `start.bat`.
 
 Una vez iniciado:
 - **Tienda Pública:** [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
@@ -147,4 +149,3 @@ python tests/test_innova.py
 8. `test_promotions_and_pricing_rules`: Evalúa descuentos porcentuales, fijos y caducidad temporal.
 9. `test_category_deletion_protection`: Verifica protección relacional en categorías con productos.
 10. `test_file_upload_security`: Evalúa validación de firmas de archivo, rechazo de texto/scripts y subida de PNGs válidos.
-

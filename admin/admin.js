@@ -164,7 +164,7 @@
         loginError.hidden = false;
       }
     } catch (err) {
-      loginError.textContent = "Error de conexión con el servidor.";
+      loginError.textContent = "No se pudo conectar con el servidor. Inicia el backend y vuelve a intentarlo.";
       loginError.hidden = false;
     } finally {
       loginSubmit.disabled = false;
@@ -1433,4 +1433,3 @@
   // Kickstart Application
   checkAuth();
 })();
-

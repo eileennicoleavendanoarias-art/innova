@@ -1,0 +1,22 @@
+/data/*.db
+/data/*.db-*
+# Secretos y configuraciones privadas
+.env
+.env.*
+!.env.example
+secrets.json
+credentials.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Bases de datos
+*.db
+*.sqlite
+*.sqlite3
+
+# Dependencias
+node_modules/

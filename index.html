@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Explora el catálogo de tecnología de INNOVA. Productos seleccionados, con información clara y atención personalizada.">
+    <title>INNOVA — la mejor calidad al mejor precio</title>
+    <link rel="icon" href="assets/innova-favicon.png" type="image/png">
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="stylesheet" href="styles.css">
+    <script src="catalog-data.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="wordmark" href="#" aria-label="INNOVA, inicio"><img src="assets/innova-mark.png" alt="" aria-hidden="true">INNOVA</a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+          <span class="sr-only">Abrir menú</span>
+          <span></span><span></span>
+        </button>
+        <nav class="primary-navigation" id="primary-navigation" aria-label="Navegación principal">
+          <a href="#categorias">Categorías</a>
+          <a href="#catalogo">Catálogo</a>
+          <a href="#nosotros">Nosotros</a>
+          <button class="nav-account-btn" id="nav-account-btn" type="button" aria-label="Mi Cuenta">
+            <span class="nav-account-icon">👤</span>
+            <span class="nav-account-label" id="nav-account-label">Mi Cuenta</span>
+            <span class="notif-badge-pill" id="header-notif-pill" hidden>0</span>
+          </button>
+          <a class="nav-contact" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow hero-eyebrow"><span class="eyebrow-line"></span> Tecnología, con intención</p>
+          <h1 id="hero-title">Lo extraordinario<br>está en los <em>detalles.</em></h1>
+          <p class="hero-description">Tecnología cuidadosamente seleccionada para acompañar tu manera de vivir, crear y conectar.</p>
+          <a class="button button-light" href="#catalogo">Explorar catálogo <span aria-hidden="true">↘</span></a>
+          <p class="hero-note">Una selección para cada día.</p>
+        </div>
+        <div class="hero-visual" aria-label="Teléfono inteligente en una composición de estudio monocromática" role="img">
+          <img src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&amp;fit=crop&amp;w=1200&amp;q=85" alt="" fetchpriority="high">
+          <span class="hero-index">01 <span></span> INNOVA SELECTION</span>
+        </div>
+        <a class="hero-scroll" href="#categorias"><span></span> Desliza para descubrir</a>
+      </section>
+
+      <section class="category-section section-wrap" id="categorias" aria-labelledby="categories-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Encuentra tu próximo favorito</p>
+            <h2 id="categories-title">Explora por categoría</h2>
+          </div>
+          <a class="text-link" href="#catalogo">Ver todo el catálogo <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="category-grid" id="category-list" aria-label="Categorías de productos"></div>
+      </section>
+
+      <section class="catalog-section" id="catalogo" aria-labelledby="catalog-title">
+        <div class="section-wrap">
+          <div class="section-heading catalog-heading">
+            <div>
+              <p class="eyebrow">Selección INNOVA</p>
+              <h2 id="catalog-title">Tecnología que conecta.</h2>
+            </div>
+            <p class="catalog-intro">Diseño, utilidad y calidad en una selección que evoluciona contigo. Productos, imágenes y precios de demostración.</p>
+          </div>
+
+          <div class="featured-block" aria-labelledby="featured-title">
+            <div class="featured-heading">
+              <h3 id="featured-title">Destacados</h3>
+              <span>Una mirada más de cerca</span>
+            </div>
+            <div class="featured-grid" id="featured-list"></div>
+          </div>
+
+          <div class="catalog-toolbar">
+            <div class="catalog-toolbar-copy">
+              <h3>Todos los productos</h3>
+              <p id="result-count" aria-live="polite"></p>
+            </div>
+            <div class="catalog-controls">
+              <label class="search-field">
+                <span class="sr-only">Buscar productos</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.5 4.5"></path></svg>
+                <input id="product-search" type="search" placeholder="Buscar productos" autocomplete="off">
+                <kbd>/</kbd>
+              </label>
+              <label class="sort-field">
+                <span class="sr-only">Ordenar productos por precio</span>
+                <select id="sort-order">
+                  <option value="featured">Orden: destacados</option>
+                  <option value="price-asc">Precio: menor a mayor</option>
+                  <option value="price-desc">Precio: mayor a menor</option>
+                </select>
+                <span class="select-chevron" aria-hidden="true">⌄</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="filter-row" id="filter-list" aria-label="Filtrar por categoría"></div>
+          <div class="product-grid" id="product-list" aria-live="polite"></div>
+          <div class="empty-state" id="empty-state" hidden>
+            <span class="empty-mark" aria-hidden="true">—</span>
+            <h3>No encontramos ese producto.</h3>
+            <p>Prueba con otro nombre o revisa todas las categorías.</p>
+            <button class="button button-dark" id="clear-filters" type="button">Limpiar búsqueda</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-section section-wrap" id="nosotros" aria-labelledby="about-title">
+        <p class="eyebrow">Una forma más simple de elegir</p>
+        <div class="about-content">
+          <h2 id="about-title">La tecnología correcta<br>se siente <em>natural.</em></h2>
+          <div>
+            <p>En INNOVA creemos que elegir tecnología debería ser tan intuitivo como usarla. Por eso reunimos productos funcionales, diseño cuidado y una atención cercana, en un solo lugar.</p>
+            <a class="text-link" href="#contacto">Conoce más sobre INNOVA <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-section" id="contacto" aria-labelledby="contact-title">
+        <div class="contact-inner section-wrap">
+          <div>
+            <p class="eyebrow">Estamos para ayudarte</p>
+            <h2 id="contact-title">¿Buscas algo en particular?</h2>
+            <p>Cuéntanos qué necesitas. Te ayudaremos a encontrar la opción adecuada para ti.</p>
+          </div>
+          <button class="button button-light contact-button" type="button" data-whatsapp>
+            Consultar por WhatsApp <span aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-main section-wrap">
+        <div class="footer-brand">
+          <a class="wordmark" href="#" aria-label="INNOVA, inicio"><img src="assets/innova-mark.png" alt="" aria-hidden="true">INNOVA</a>
+          <p>Tecnología, con intención.</p>
+        </div>
+        <div class="footer-column">
+          <h2>Explora</h2>
+          <a href="#categorias">Categorías</a>
+          <a href="#catalogo">Catálogo</a>
+          <a href="#nosotros">Nosotros</a>
+        </div>
+        <div class="footer-column">
+          <h2>Contacto</h2>
+          <button type="button" data-whatsapp>Escríbenos por WhatsApp <span aria-hidden="true">↗</span></button>
+          <p>Canal de atención configurable</p>
+        </div>
+      </div>
+      <div class="footer-bottom section-wrap">
+        <span>© <span id="current-year"></span> INNOVA. Todos los derechos reservados.</span>
+        <span>Precios e imágenes de demostración.</span>
+      </div>
+    </footer>
+
+    <dialog class="product-dialog" id="product-dialog" aria-labelledby="dialog-title">
+      <button class="dialog-close" type="button" aria-label="Cerrar detalles">×</button>
+      <div id="dialog-content"></div>
+    </dialog>
+
+    <!-- Unified Customer & Admin Account Modal -->
+    <dialog class="account-dialog" id="account-dialog" aria-labelledby="account-dialog-title">
+      <button class="dialog-close" id="account-dialog-close" type="button" aria-label="Cerrar cuenta">×</button>
+      
+      <!-- AUTH VIEW (when unauthenticated) -->
+      <div id="account-auth-container" class="account-modal-body">
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab-btn active" data-auth-tab="login">Iniciar Sesión</button>
+          <button type="button" class="auth-tab-btn" data-auth-tab="register">Crear Cuenta</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="auth-panel-login" class="auth-panel active">
+          <h3 id="account-dialog-title">Acceso a tu Cuenta</h3>
+          <p class="auth-intro">Ingresa con tu correo o usuario. Si eres administrador, accederás automáticamente a tus funciones de gestión.</p>
+
+          <form id="customer-login-form" novalidate>
+            <div id="customer-login-error" class="dialog-alert dialog-alert-error" hidden></div>
+            
+            <div class="field-wrap">
+              <label for="cust-login-identifier">Correo Electrónico o Usuario</label>
+              <input type="text" id="cust-login-identifier" class="text-input" placeholder="ej. usuario@correo.com" required autocomplete="username">
+            </div>
+
+            <div class="field-wrap">
+              <label for="cust-login-password">Contraseña</label>
+              <div class="input-with-action">
+                <input type="password" id="cust-login-password" class="text-input" placeholder="••••••••" required autocomplete="current-password">
+                <button type="button" class="btn-toggle-eye" id="toggle-cust-password" aria-label="Ver u ocultar contraseña">👁️</button>
+              </div>
+            </div>
+
+            <div class="auth-actions-row">
+              <button type="button" class="link-btn" id="btn-show-forgot">¿Olvidaste tu contraseña?</button>
+            </div>
+
+            <button type="submit" class="button button-light btn-block" id="btn-cust-login-submit">
+              <span>Iniciar Sesión</span>
+            </button>
+          </form>
+
+          <div class="auth-discreet-note">
+            <span class="auth-shield-icon">🔒</span>
+            <span>Acceso unificado seguro con verificación de roles en el servidor.</span>
+          </div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="auth-panel-register" class="auth-panel" hidden>
+          <h3>Crear Cuenta de Cliente</h3>
+          <p class="auth-intro">Crea tu cuenta para guardar favoritos, recibir recomendaciones personalizadas y notificaciones exclusivas.</p>
+
+          <form id="customer-register-form" novalidate>
+            <div id="customer-register-error" class="dialog-alert dialog-alert-error" hidden></div>
+
+            <div class="field-wrap">
+              <label for="cust-reg-name">Nombre Completo *</label>
+              <input type="text" id="cust-reg-name" class="text-input" placeholder="Tu nombre" required>
+            </div>
+
+            <div class="field-wrap">
+              <label for="cust-reg-email">Correo Electrónico *</label>
+              <input type="email" id="cust-reg-email" class="text-input" placeholder="correo@ejemplo.com" required autocomplete="email">
+            </div>
+
+            <div class="field-wrap">
+              <label for="cust-reg-password">Contraseña (Mínimo 8 caracteres) *</label>
+              <input type="password" id="cust-reg-password" class="text-input" placeholder="••••••••" minlength="8" required autocomplete="new-password">
+            </div>
+
+            <div class="field-wrap">
+              <label for="cust-reg-confirm">Confirmar Contraseña *</label>
+              <input type="password" id="cust-reg-confirm" class="text-input" placeholder="••••••••" minlength="8" required autocomplete="new-password">
+            </div>
+
+            <div class="prefs-checkboxes-box">
+              <span class="prefs-title">Preferencias de Comunicación:</span>
+              <label class="check-item">
+                <input type="checkbox" id="reg-pref-promos" checked>
+                <span>Recibir promociones y ofertas especiales</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" id="reg-pref-new" checked>
+                <span>Recibir avisos de nuevos productos</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" id="reg-pref-stock" checked>
+                <span>Alertas de disponibilidad y reposición</span>
+              </label>
+            </div>
+
+            <button type="submit" class="button button-light btn-block" id="btn-cust-register-submit">
+              <span>Registrarme e Iniciar Sesión</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Password Recovery Form -->
+        <div id="auth-panel-forgot" class="auth-panel" hidden>
+          <h3>Recuperar Contraseña</h3>
+          <p class="auth-intro">Ingresa tu correo para generar un código seguro de restablecimiento.</p>
+
+          <form id="customer-forgot-form" novalidate>
+            <div id="customer-forgot-msg" class="dialog-alert" hidden></div>
+
+            <div id="forgot-step-1">
+              <div class="field-wrap">
+                <label for="cust-forgot-email">Correo Electrónico</label>
+                <input type="email" id="cust-forgot-email" class="text-input" placeholder="correo@ejemplo.com" required>
+              </div>
+              <button type="button" class="button button-light btn-block" id="btn-send-reset-code">Solicitar Código</button>
+            </div>
+
+            <div id="forgot-step-2" hidden style="margin-top: 14px;">
+              <div class="field-wrap">
+                <label for="cust-reset-token">Código de Recuperación</label>
+                <input type="text" id="cust-reset-token" class="text-input" placeholder="Código generado">
+              </div>
+              <div class="field-wrap">
+                <label for="cust-reset-newpass">Nueva Contraseña (mínimo 8 caracteres)</label>
+                <input type="password" id="cust-reset-newpass" class="text-input" placeholder="••••••••" minlength="8">
+              </div>
+              <button type="button" class="button button-light btn-block" id="btn-confirm-reset-pass">Restablecer Contraseña</button>
+            </div>
+
+            <div class="auth-actions-row" style="margin-top: 16px;">
+              <button type="button" class="link-btn" id="btn-back-to-login">← Volver al inicio de sesión</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- PORTAL VIEW (when authenticated as customer or admin) -->
+      <div id="account-portal-container" class="account-modal-body" hidden>
+        <!-- Portal Header -->
+        <div class="portal-header">
+          <div class="portal-user-meta">
+            <div class="portal-avatar" id="portal-user-initial">C</div>
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <h3 id="portal-user-name" style="margin:0;">Cliente</h3>
+                <span class="portal-role-badge" id="portal-user-role">Cliente</span>
+              </div>
+              <small id="portal-user-email" style="color:var(--muted); font-size:11px;">cliente@correo.com</small>
+            </div>
+          </div>
+          <div class="portal-header-actions">
+            <a href="/admin" id="portal-admin-link" class="button button-light btn-sm" hidden>Panel Admin ↗</a>
+            <button type="button" class="button button-dark btn-sm" id="btn-portal-logout">Cerrar Sesión</button>
+          </div>
+        </div>
+
+        <!-- Portal Navigation Tabs -->
+        <div class="portal-tabs-bar">
+          <button type="button" class="portal-tab-btn active" data-portal-tab="recs">✨ Para Ti</button>
+          <button type="button" class="portal-tab-btn" data-portal-tab="favs">❤️ Favoritos (<span id="portal-favs-count">0</span>)</button>
+          <button type="button" class="portal-tab-btn" data-portal-tab="notifs">🔔 Notificaciones (<span id="portal-notifs-count">0</span>)</button>
+          <button type="button" class="portal-tab-btn" data-portal-tab="activity">📜 Mi Actividad</button>
+          <button type="button" class="portal-tab-btn" data-portal-tab="profile">👤 Mi Perfil</button>
+        </div>
+
+        <!-- Portal Tab 1: Recommendations -->
+        <div id="portal-panel-recs" class="portal-panel active">
+          <div class="panel-intro-row">
+            <div>
+              <h4>Recomendaciones Inteligentes</h4>
+              <p id="portal-recs-sub" class="panel-sub">Productos seleccionados con base en tus preferencias y disponibilidad real.</p>
+            </div>
+          </div>
+          <div class="portal-product-grid" id="portal-recs-grid"></div>
+        </div>
+
+        <!-- Portal Tab 2: Favorites -->
+        <div id="portal-panel-favs" class="portal-panel" hidden>
+          <div class="panel-intro-row">
+            <h4>Tus Productos Favoritos</h4>
+            <p class="panel-sub">Productos que has guardado para consultar o seguir su precio.</p>
+          </div>
+          <div class="portal-product-grid" id="portal-favs-grid"></div>
+          <div id="portal-favs-empty" class="portal-empty-state" hidden>
+            <span>♡</span>
+            <p>Aún no has guardado productos en favoritos.<br>Haz clic en el corazón de cualquier producto en el catálogo para agregarlo aquí.</p>
+          </div>
+        </div>
+
+        <!-- Portal Tab 3: Notifications -->
+        <div id="portal-panel-notifs" class="portal-panel" hidden>
+          <div class="panel-intro-row" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h4>Centro de Notificaciones</h4>
+              <p class="panel-sub">Avisos de promociones, nuevos lanzamientos y disponibilidad.</p>
+            </div>
+            <button type="button" class="link-btn" id="btn-mark-all-read">Marcar todas como leídas</button>
+          </div>
+
+          <div class="notifs-list" id="portal-notifs-list"></div>
+          <div id="portal-notifs-empty" class="portal-empty-state" hidden>
+            <p>No tienes notificaciones pendientes.</p>
+          </div>
+
+          <!-- Notification Preferences Box -->
+          <div class="notif-prefs-box">
+            <h5>Gestionar qué notificaciones deseas recibir:</h5>
+            <div class="prefs-checkboxes-box">
+              <label class="check-item">
+                <input type="checkbox" id="portal-pref-promos">
+                <span>Promociones y descuentos especiales</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" id="portal-pref-new">
+                <span>Novedades y nuevos productos</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" id="portal-pref-stock">
+                <span>Alertas de existencias y reposición de favoritos</span>
+              </label>
+            </div>
+            <button type="button" class="button button-light btn-sm" id="btn-save-notif-prefs" style="margin-top:8px;">Guardar Preferencias</button>
+          </div>
+        </div>
+
+        <!-- Portal Tab 4: Activity History -->
+        <div id="portal-panel-activity" class="portal-panel" hidden>
+          <div class="panel-intro-row" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h4>Tu Historial de Actividad</h4>
+              <p class="panel-sub">Registro de consultas para personalizar tus recomendaciones. Privado y protegido.</p>
+            </div>
+            <button type="button" class="button button-dark btn-sm" id="btn-clear-activity">Borrar Historial</button>
+          </div>
+          <div class="activity-timeline" id="portal-activity-list"></div>
+          <div id="portal-activity-empty" class="portal-empty-state" hidden>
+            <p>Aún no hay actividad registrada en tu cuenta.</p>
+          </div>
+        </div>
+
+        <!-- Portal Tab 5: Profile & Settings -->
+        <div id="portal-panel-profile" class="portal-panel" hidden>
+          <h4>Datos de tu Cuenta</h4>
+          <form id="portal-profile-form" style="margin-top:14px;">
+            <div class="field-wrap">
+              <label for="portal-input-name">Nombre Completo</label>
+              <input type="text" id="portal-input-name" class="text-input" required>
+            </div>
+            <div class="field-wrap">
+              <label for="portal-input-phone">Teléfono de Contacto (Opcional)</label>
+              <input type="text" id="portal-input-phone" class="text-input" placeholder="+57 300 000 0000">
+            </div>
+            <div class="field-wrap">
+              <label>Correo Electrónico (No modificable)</label>
+              <input type="text" id="portal-static-email" class="text-input" readonly disabled style="opacity:0.6;">
+            </div>
+            <div class="field-wrap">
+              <label>Fecha de Registro</label>
+              <span id="portal-static-date" style="color:var(--muted); font-size:12px;">-</span>
+            </div>
+            <button type="submit" class="button button-light btn-sm">Actualizar Datos</button>
+          </form>
+
+          <hr style="border:0; border-top:1px solid #222; margin:24px 0;">
+
+          <h4>Cambiar Contraseña</h4>
+          <form id="portal-change-pass-form" style="margin-top:14px;">
+            <div id="portal-pass-msg" class="dialog-alert" hidden></div>
+            <div class="field-wrap">
+              <label for="portal-pass-curr">Contraseña Actual</label>
+              <input type="password" id="portal-pass-curr" class="text-input" required autocomplete="current-password">
+            </div>
+            <div class="field-wrap">
+              <label for="portal-pass-new">Nueva Contraseña (mínimo 8 caracteres)</label>
+              <input type="password" id="portal-pass-new" class="text-input" minlength="8" required autocomplete="new-password">
+            </div>
+            <button type="submit" class="button button-light btn-sm">Actualizar Contraseña</button>
+          </form>
+
+          <hr style="border:0; border-top:1px solid #222; margin:24px 0;">
+
+          <div style="background:#140808; border:1px solid #3d1515; padding:16px; border-radius:4px;">
+            <h5 style="color:#ef4444; margin:0 0 6px;">Privacidad y Eliminación de Cuenta</h5>
+            <p style="color:#aaa; font-size:11px; margin:0 0 12px;">Conforme a las leyes de protección de datos personales, puedes solicitar la eliminación permanente de tu cuenta y todos tus registros asociados.</p>
+            <button type="button" class="button button-dark btn-sm" id="btn-delete-account" style="border-color:#b91c1c; color:#ef4444;">Eliminar Mi Cuenta Definitivamente</button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html> 

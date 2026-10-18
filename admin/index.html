@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <title>INNOVA — Panel de Administración</title>
+  <link rel="icon" href="/assets/innova-favicon.png" type="image/png">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- ================= AUTH VIEW ================= -->
+  <div id="auth-view" class="auth-wrapper" hidden>
+    <div class="auth-card">
+      <div class="auth-brand">
+        <a class="wordmark" href="#" aria-label="INNOVA">
+          <img src="/assets/innova-mark.png" alt="Logo INNOVA">
+          <span>INNOVA</span>
+        </a>
+        <span class="auth-badge">ADMIN</span>
+      </div>
+      <h2>Acceso Administrativo</h2>
+      <p class="auth-sub">Ingresa tus credenciales para gestionar la tienda.</p>
+
+      <form id="login-form" class="auth-form" novalidate>
+        <div id="login-error" class="alert alert-error" hidden></div>
+        
+        <div class="form-group">
+          <label for="login-identifier">Usuario o Correo Electrónico</label>
+          <input type="text" id="login-identifier" class="form-control" placeholder="ej. admin o admin@innova.com" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Contraseña</label>
+          <div class="password-input-wrap">
+            <input type="password" id="login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            <button type="button" id="toggle-password" class="btn-icon" aria-label="Mostrar u ocultar contraseña">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" id="login-submit" class="btn btn-primary btn-block">
+          <span class="btn-text">Iniciar Sesión</span>
+          <span class="btn-spinner" hidden></span>
+        </button>
+      </form>
+      <div class="auth-footer">
+        <a href="/" target="_blank" rel="noopener">← Volver a la tienda pública</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= APP VIEW ================= -->
+  <div id="app-view" class="app-layout" hidden>
+    <!-- Sidebar -->
+    <aside class="app-sidebar" id="app-sidebar">
+      <div class="sidebar-header">
+        <a class="wordmark" href="#dashboard">
+          <img src="/assets/innova-mark.png" alt="Logo INNOVA">
+          <span>INNOVA</span>
+          <span class="admin-badge">ADMIN</span>
+        </a>
+        <button type="button" class="btn-icon sidebar-close-btn" id="sidebar-close" aria-label="Cerrar navegación">✕</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-item active" data-nav="dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+        <a href="#products" class="nav-item" data-nav="products">
+          <span class="nav-icon">📦</span>
+          <span class="nav-label">Productos</span>
+        </a>
+        <a href="#inventory" class="nav-item" data-nav="inventory">
+          <span class="nav-icon">📋</span>
+          <span class="nav-label">Inventario</span>
+        </a>
+        <a href="#promotions" class="nav-item" data-nav="promotions">
+          <span class="nav-icon">🏷️</span>
+          <span class="nav-label">Promociones</span>
+        </a>
+        <a href="#categories" class="nav-item" data-nav="categories">
+          <span class="nav-icon">🗂️</span>
+          <span class="nav-label">Categorías</span>
+        </a>
+        <a href="#notifications" class="nav-item" data-nav="notifications">
+          <span class="nav-icon">📢</span>
+          <span class="nav-label">Notificaciones</span>
+        </a>
+        <a href="#settings" class="nav-item" data-nav="settings">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Configuración</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar" id="user-avatar-initial">A</div>
+          <div class="user-meta">
+            <strong id="user-display-name">Administrador</strong>
+            <small id="user-display-role">admin</small>
+          </div>
+        </div>
+        <button type="button" id="logout-btn" class="btn btn-secondary btn-sm btn-block">Cerrar Sesión</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="app-main">
+      <!-- Topbar -->
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button type="button" id="sidebar-toggle" class="btn-icon menu-btn" aria-label="Abrir navegación">☰</button>
+          <h1 id="page-title" class="topbar-title">Dashboard</h1>
+        </div>
+        <div class="topbar-right">
+          <a href="/" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Ver Tienda Pública ↗</a>
+        </div>
+      </header>
+
+      <!-- Main Body -->
+      <main class="app-content">
+        <!-- SECTION: DASHBOARD -->
+        <section id="section-dashboard" class="content-section active">
+          <div class="dashboard-metrics-grid">
+            <div class="metric-card">
+              <span class="metric-label">Total Productos</span>
+              <strong class="metric-value" id="metric-total">0</strong>
+              <small class="metric-sub">En catálogo general</small>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Productos Activos</span>
+              <strong class="metric-value metric-success" id="metric-active">0</strong>
+              <small class="metric-sub">Visibles al cliente</small>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Productos Agotados</span>
+              <strong class="metric-value metric-danger" id="metric-out">0</strong>
+              <small class="metric-sub">Sin existencias (0 unidades)</small>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Inventario Bajo</span>
+              <strong class="metric-value metric-warning" id="metric-low">0</strong>
+              <small class="metric-sub" id="metric-low-sub">Umbral: ≤ 5 unid.</small>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Promociones Activas</span>
+              <strong class="metric-value metric-info" id="metric-promos">0</strong>
+              <small class="metric-sub">Campañas vigentes hoy</small>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Clientes Registrados</span>
+              <strong class="metric-value" id="metric-customers" style="color:#a855f7;">0</strong>
+              <small class="metric-sub">Cuentas activas en tienda</small>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="quick-actions-bar">
+            <h3>Accesos Rápidos</h3>
+            <div class="quick-btn-group">
+              <button type="button" class="btn btn-primary" id="btn-quick-new-product">+ Nuevo Producto</button>
+              <button type="button" class="btn btn-outline" id="btn-quick-inventory">Gestionar Inventario</button>
+              <button type="button" class="btn btn-outline" id="btn-quick-promo">+ Nueva Promoción</button>
+            </div>
+          </div>
+
+          <!-- Dashboard Grid: Latest Products & Movements -->
+          <div class="dashboard-panels-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Últimos Productos Añadidos</h3>
+                <a href="#products" class="panel-link">Ver todos →</a>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table" id="dashboard-products-table">
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Categoría</th>
+                      <th>Precio</th>
+                      <th>Stock</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Movimientos Recientes de Stock</h3>
+                <a href="#inventory" class="panel-link">Ver historial →</a>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table" id="dashboard-movements-table">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Producto</th>
+                      <th>Ajuste</th>
+                      <th>Stock Resultante</th>
+                      <th>Motivo</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: PRODUCTS -->
+        <section id="section-products" class="content-section" hidden>
+          <div class="section-toolbar">
+            <div class="toolbar-search">
+              <input type="search" id="product-filter-search" class="form-control" placeholder="Buscar por nombre, SKU o descripción...">
+            </div>
+            <div class="toolbar-filters">
+              <select id="product-filter-category" class="form-control">
+                <option value="Todos">Todas las categorías</option>
+              </select>
+              <select id="product-filter-status" class="form-control">
+                <option value="">Todos los estados</option>
+                <option value="active">Activos</option>
+                <option value="inactive">Inactivos</option>
+                <option value="draft">Borradores</option>
+              </select>
+              <select id="product-filter-sort" class="form-control">
+                <option value="featured">Destacados primero</option>
+                <option value="price-asc">Precio: menor a mayor</option>
+                <option value="price-desc">Precio: mayor a menor</option>
+                <option value="stock-asc">Stock: menor a mayor</option>
+                <option value="name-asc">Nombre (A-Z)</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-open-create-product">+ Nuevo Producto</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="products-table">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">Img</th>
+                  <th>Nombre & SKU</th>
+                  <th>Categoría</th>
+                  <th>Precio Normal</th>
+                  <th>Precio Efectivo</th>
+                  <th>Stock</th>
+                  <th>Estado</th>
+                  <th>Destacado</th>
+                  <th style="width: 140px; text-align: right;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="products-empty-state" class="empty-state" hidden>
+            <p>No se encontraron productos con los filtros aplicados.</p>
+          </div>
+        </section>
+
+        <!-- SECTION: INVENTORY -->
+        <section id="section-inventory" class="content-section" hidden>
+          <div class="section-toolbar">
+            <div class="toolbar-search">
+              <input type="search" id="inventory-search" class="form-control" placeholder="Buscar en inventario por nombre o SKU...">
+            </div>
+            <div class="toolbar-filters">
+              <div class="btn-group" id="inventory-filter-group">
+                <button type="button" class="btn btn-sm btn-outline active" data-inv-filter="all">Todos</button>
+                <button type="button" class="btn btn-sm btn-outline" data-inv-filter="in">Con Stock</button>
+                <button type="button" class="btn btn-sm btn-outline" data-inv-filter="low">Stock Bajo</button>
+                <button type="button" class="btn btn-sm btn-outline" data-inv-filter="out">Agotados</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">Img</th>
+                  <th>Producto & SKU</th>
+                  <th>Categoría</th>
+                  <th>Existencias Actuales</th>
+                  <th>Nivel</th>
+                  <th style="text-align: right;">Ajustes Rápidos</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <!-- Stock Movement Audit Log -->
+          <div class="panel" style="margin-top: 30px;">
+            <div class="panel-header">
+              <h3>Historial de Movimientos de Stock (Auditoría)</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="inventory-movements-full-table">
+                <thead>
+                  <tr>
+                    <th>Fecha / Hora</th>
+                    <th>Producto</th>
+                    <th>Stock Anterior</th>
+                    <th>Ajuste</th>
+                    <th>Stock Nuevo</th>
+                    <th>Motivo</th>
+                    <th>Responsable</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: PROMOTIONS -->
+        <section id="section-promotions" class="content-section" hidden>
+          <div class="section-toolbar">
+            <div>
+              <h2>Campañas y Descuentos</h2>
+              <p class="section-subtitle">Configura descuentos automáticos por porcentaje o monto fijo aplicables a productos o categorías.</p>
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-open-create-promo">+ Nueva Promoción</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="promotions-table">
+              <thead>
+                <tr>
+                  <th>Nombre & Descripción</th>
+                  <th>Descuento</th>
+                  <th>Aplica a</th>
+                  <th>Vigencia (Inicio → Fin)</th>
+                  <th>Estado</th>
+                  <th>Activa</th>
+                  <th style="width: 120px; text-align: right;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="promotions-empty-state" class="empty-state" hidden>
+            <p>No hay promociones registradas. Haz clic en "+ Nueva Promoción" para comenzar.</p>
+          </div>
+        </section>
+
+        <!-- SECTION: CATEGORIES -->
+        <section id="section-categories" class="content-section" hidden>
+          <div class="section-toolbar">
+            <div>
+              <h2>Categorías de Productos</h2>
+              <p class="section-subtitle">Organiza los productos en la tienda pública.</p>
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-open-create-category">+ Nueva Categoría</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="categories-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Slug / Identificador</th>
+                  <th>Descripción</th>
+                  <th>Productos Asociados</th>
+                  <th style="width: 120px; text-align: right;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION: SETTINGS -->
+        <section id="section-settings" class="content-section" hidden>
+          <div class="settings-container">
+            <h2>Configuración General de la Tienda</h2>
+            <p class="section-subtitle">Parámetros comerciales, canales de contacto y políticas de inventario.</p>
+
+            <form id="settings-form" class="settings-form">
+              <div class="panel">
+                <h3>Identidad Comercial</h3>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="setting-store-name">Nombre Comercial</label>
+                    <input type="text" id="setting-store-name" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="setting-store-tagline">Eslogan / Subtítulo</label>
+                    <input type="text" id="setting-store-tagline" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <h3>Contacto & Atención al Cliente</h3>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="setting-whatsapp-url">Enlace Directo de WhatsApp</label>
+                    <input type="url" id="setting-whatsapp-url" class="form-control" placeholder="https://wa.link/..." required>
+                    <small>Este enlace se utiliza en los botones de "Consultar por WhatsApp".</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="setting-whatsapp-phone">Teléfono / WhatsApp Visible</label>
+                    <input type="text" id="setting-whatsapp-phone" class="form-control" placeholder="+57 300 000 0000">
+                  </div>
+                  <div class="form-group">
+                    <label for="setting-contact-email">Correo Electrónico de Contacto</label>
+                    <input type="email" id="setting-contact-email" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <h3>Moneda e Inventario</h3>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="setting-currency-code">Código de Moneda</label>
+                    <input type="text" id="setting-currency-code" class="form-control" value="COP" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="setting-currency-symbol">Símbolo de Moneda</label>
+                    <input type="text" id="setting-currency-symbol" class="form-control" value="$" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="setting-low-stock-threshold">Umbral de Inventario Bajo</label>
+                    <input type="number" id="setting-low-stock-threshold" class="form-control" min="1" max="100" value="5" required>
+                    <small>Los productos con existencias menores o iguales a este número activarán alertas de stock bajo.</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <h3>Aviso / Anuncio Comercial</h3>
+                <div class="form-group">
+                  <label for="setting-announcement">Texto de Anuncio (Opcional)</label>
+                  <input type="text" id="setting-announcement" class="form-control">
+                </div>
+              </div>
+
+              <div class="settings-actions">
+                <button type="submit" class="btn btn-primary" id="btn-save-settings">Guardar Cambios de Configuración</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- SECTION: NOTIFICATIONS -->
+        <section id="section-notifications" class="content-section" hidden>
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Emitir Campaña o Notificación a Clientes</h3>
+              <p style="color:var(--text-muted); font-size:12px; margin:4px 0 0;">Envía comunicados y alertas comerciales que se sincronizan directamente en el Centro de Notificaciones de cada cliente, respetando sus preferencias de suscripción.</p>
+            </div>
+
+            <form id="form-send-notification" style="margin-top:20px;">
+              <div id="notif-broadcast-alert" class="alert" hidden></div>
+
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label for="notif-target">Audiencia / Destinatarios *</label>
+                  <select id="notif-target" class="form-control" required>
+                    <option value="all">Todos los clientes registrados</option>
+                    <option value="promos">Clientes suscritos a Promociones y Descuentos</option>
+                    <option value="new_products">Clientes suscritos a Nuevos Productos y Novedades</option>
+                    <option value="stock_alerts">Clientes suscritos a Alertas de Disponibilidad</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="notif-type">Tipo de Notificación</label>
+                  <select id="notif-type" class="form-control">
+                    <option value="info">Informativa general</option>
+                    <option value="promo">Promoción o Descuento</option>
+                    <option value="alert">Aviso de Existencias / Reposición</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="notif-link">Enlace / Destino (Opcional)</label>
+                  <input type="text" id="notif-link" class="form-control" placeholder="#catalogo o #categorias">
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="notif-title">Título de la Notificación *</label>
+                  <input type="text" id="notif-title" class="form-control" placeholder="ej. ¡Nueva Colección de Tecnología disponible!" required>
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="notif-message">Mensaje / Contenido *</label>
+                  <textarea id="notif-message" class="form-control" rows="4" placeholder="Escribe el mensaje que verán los clientes en su Centro de Notificaciones..." required></textarea>
+                </div>
+              </div>
+
+              <div style="margin-top:20px; display:flex; justify-content:flex-end;">
+                <button type="submit" class="btn btn-primary" id="btn-broadcast-notif">
+                  <span class="btn-text">Enviar Notificación a Clientes</span>
+                  <span class="btn-spinner" hidden></span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Modal: Product Create / Edit -->
+  <dialog id="modal-product" class="admin-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-product-title">Nuevo Producto</h3>
+        <button type="button" class="btn-icon modal-close-btn" data-close-modal="modal-product">✕</button>
+      </div>
+      <form id="form-product" class="modal-body">
+        <input type="hidden" id="prod-id">
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="prod-name">Nombre del Producto *</label>
+            <input type="text" id="prod-name" class="form-control" required placeholder="ej. Smartphone Pro">
+          </div>
+
+          <div class="form-group">
+            <label for="prod-category">Categoría *</label>
+            <select id="prod-category" class="form-control" required></select>
+          </div>
+
+          <div class="form-group">
+            <label for="prod-sku">Código SKU / Referencia</label>
+            <input type="text" id="prod-sku" class="form-control" placeholder="ej. SKU-PRO-01">
+          </div>
+
+          <div class="form-group">
+            <label for="prod-price">Precio Normal (COP) *</label>
+            <input type="number" id="prod-price" class="form-control" min="0" step="1" required placeholder="0">
+          </div>
+
+          <div class="form-group">
+            <label for="prod-promo-price">Precio Promocional Directo (Opcional)</label>
+            <input type="number" id="prod-promo-price" class="form-control" min="0" step="1" placeholder="Dejar vacío si no aplica">
+            <small id="prod-discount-indicator" style="display:block; margin-top:4px; font-weight:600;"></small>
+          </div>
+
+          <div class="form-group">
+            <label for="prod-stock">Inventario Inicial / Stock *</label>
+            <input type="number" id="prod-stock" class="form-control" min="0" required value="0">
+          </div>
+
+          <div class="form-group">
+            <label for="prod-status">Estado de Publicación</label>
+            <select id="prod-status" class="form-control">
+              <option value="active">Activo (Visible en tienda)</option>
+              <option value="inactive">Inactivo (Oculto)</option>
+              <option value="draft">Borrador</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="checkbox-label">
+              <input type="checkbox" id="prod-featured">
+              <span>Destacar producto en la tienda pública (Sección Destacados)</span>
+            </label>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="prod-short-desc">Descripción Corta</label>
+            <input type="text" id="prod-short-desc" class="form-control" placeholder="Frase resumen para tarjetas de catálogo">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="prod-full-desc">Descripción Detallada</label>
+            <textarea id="prod-full-desc" class="form-control" rows="3" placeholder="Información completa para la ventana de detalles"></textarea>
+          </div>
+
+          <!-- Product Photos Manager -->
+          <div class="form-group full-width">
+            <label>Fotografías del Producto</label>
+            <div class="image-uploader-box">
+              <div class="uploader-dropzone">
+                <input type="file" id="prod-file-input" accept="image/png,image/jpeg,image/webp,image/gif" multiple class="file-input-hidden">
+                <button type="button" class="btn btn-outline btn-sm" id="btn-trigger-upload">Subir Fotografías desde Dispositivo</button>
+                <span class="uploader-note">Formatos: PNG, JPG, WebP, GIF (Máx 5MB). Almacenamiento seguro y persistente.</span>
+              </div>
+              <div class="uploader-or">o ingresa una URL:</div>
+              <div class="uploader-url-row">
+                <input type="url" id="prod-image-url-input" class="form-control" placeholder="https://...">
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-add-image-url">Añadir URL</button>
+              </div>
+            </div>
+
+            <!-- Gallery Previews -->
+            <div id="product-images-gallery" class="images-preview-gallery"></div>
+          </div>
+
+          <!-- Specifications -->
+          <div class="form-group full-width">
+            <label>Especificaciones / Características Clave</label>
+            <div class="specs-builder">
+              <div class="specs-input-row">
+                <input type="text" id="spec-input" class="form-control" placeholder="ej. Batería de 5000 mAh">
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-add-spec">Añadir</button>
+              </div>
+              <ul id="specs-list" class="specs-chips-list"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close-modal="modal-product">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-product">Guardar Producto</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Adjust Inventory -->
+  <dialog id="modal-inventory-adjust" class="admin-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Ajustar Inventario</h3>
+        <button type="button" class="btn-icon modal-close-btn" data-close-modal="modal-inventory-adjust">✕</button>
+      </div>
+      <form id="form-inventory-adjust" class="modal-body">
+        <input type="hidden" id="adjust-product-id">
+        <p id="adjust-product-name" style="font-size:16px; font-weight:700; margin-bottom: 4px;"></p>
+        <p id="adjust-current-stock" style="color:var(--text-muted); font-size:13px; margin-bottom: 20px;"></p>
+
+        <div class="form-group">
+          <label>Tipo de Ajuste *</label>
+          <div class="radio-group">
+            <label class="radio-pill">
+              <input type="radio" name="adjust-action" value="add" checked>
+              <span>+ Añadir Unidades (Recepción)</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="adjust-action" value="subtract">
+              <span>- Restar Unidades (Baja / Merma)</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="adjust-action" value="set">
+              <span>= Establecer Cantidad Exacta</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="adjust-quantity">Cantidad *</label>
+          <input type="number" id="adjust-quantity" class="form-control" min="0" required placeholder="0">
+        </div>
+
+        <div class="form-group">
+          <label for="adjust-reason">Motivo del Ajuste *</label>
+          <input type="text" id="adjust-reason" class="form-control" required placeholder="ej. Nueva compra a proveedor, conteo físico, devolución...">
+        </div>
+
+        <div class="stock-preview-box" id="adjust-preview-box">
+          <span>Nuevo stock resultante: <strong id="adjust-resulting-stock">-</strong></span>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close-modal="modal-inventory-adjust">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-adjust">Confirmar Ajuste de Stock</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Promotion Create / Edit -->
+  <dialog id="modal-promotion" class="admin-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-promo-title">Nueva Promoción</h3>
+        <button type="button" class="btn-icon modal-close-btn" data-close-modal="modal-promotion">✕</button>
+      </div>
+      <form id="form-promotion" class="modal-body">
+        <input type="hidden" id="promo-id">
+
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="promo-name">Nombre Interno de la Promoción *</label>
+            <input type="text" id="promo-name" class="form-control" required placeholder="ej. Black Friday, Descuento Celulares...">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="promo-desc">Descripción / Condiciones</label>
+            <input type="text" id="promo-desc" class="form-control" placeholder="ej. Válido durante el fin de semana">
+          </div>
+
+          <div class="form-group">
+            <label for="promo-type">Tipo de Descuento *</label>
+            <select id="promo-type" class="form-control" required>
+              <option value="percent">Porcentaje (%)</option>
+              <option value="fixed">Monto Fijo ($ COP)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="promo-value">Valor del Descuento *</label>
+            <input type="number" id="promo-value" class="form-control" min="0.1" step="any" required placeholder="ej. 15 (para 15%)">
+          </div>
+
+          <div class="form-group">
+            <label for="promo-target-type">Aplicar a: *</label>
+            <select id="promo-target-type" class="form-control" required>
+              <option value="all">Todos los productos</option>
+              <option value="category">Categoría específica</option>
+              <option value="product">Producto específico</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="promo-target-select-wrap" hidden>
+            <label for="promo-target-id" id="promo-target-id-label">Seleccionar Objetivo</label>
+            <select id="promo-target-id" class="form-control"></select>
+          </div>
+
+          <div class="form-group">
+            <label for="promo-starts-at">Fecha y Hora de Inicio *</label>
+            <input type="datetime-local" id="promo-starts-at" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="promo-ends-at">Fecha y Hora de Finalización *</label>
+            <input type="datetime-local" id="promo-ends-at" class="form-control" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="checkbox-label">
+              <input type="checkbox" id="promo-active" checked>
+              <span>Promoción activa (Se aplicará automáticamente dentro de las fechas programadas)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close-modal="modal-promotion">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-promo">Guardar Promoción</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Category Create / Edit -->
+  <dialog id="modal-category" class="admin-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-category-title">Nueva Categoría</h3>
+        <button type="button" class="btn-icon modal-close-btn" data-close-modal="modal-category">✕</button>
+      </div>
+      <form id="form-category" class="modal-body">
+        <input type="hidden" id="category-id">
+
+        <div class="form-group">
+          <label for="category-name">Nombre de la Categoría *</label>
+          <input type="text" id="category-name" class="form-control" required placeholder="ej. Relojes">
+        </div>
+
+        <div class="form-group">
+          <label for="category-desc">Descripción</label>
+          <textarea id="category-desc" class="form-control" rows="2" placeholder="Breve descripción de la categoría"></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close-modal="modal-category">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-category">Guardar Categoría</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Modal: Delete Confirmation -->
+  <dialog id="modal-confirm" class="admin-modal">
+    <div class="modal-dialog modal-dialog-sm">
+      <div class="modal-header">
+        <h3 id="confirm-title">Confirmar Eliminación</h3>
+        <button type="button" class="btn-icon modal-close-btn" data-close-modal="modal-confirm">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message">¿Estás seguro de que deseas eliminar este elemento? Esta acción no se puede deshacer.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-close-modal="modal-confirm">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btn-confirm-delete">Eliminar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
+

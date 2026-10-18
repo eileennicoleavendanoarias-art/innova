@@ -11,7 +11,10 @@ import hmac
 import secrets
 from datetime import datetime, timedelta
 
-DB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+DB_DIR = os.environ.get(
+    "INNOVA_DATA_DIR",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "data"),
+)
 DB_PATH = os.path.join(DB_DIR, "innova.db")
 CATALOG_DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog-data.js")
 

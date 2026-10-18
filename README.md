@@ -22,6 +22,18 @@ Una vez iniciado:
 
 ---
 
+## Publicar la tienda y el panel en Render
+
+GitHub Pages solo publica archivos estáticos y no puede ejecutar la API de inicio de sesión. Para usar el administrador en línea, este repositorio incluye `render.yaml`, que configura la tienda y la API en el mismo servicio de Render, con almacenamiento persistente para la base de datos y las imágenes.
+
+1. En Render, crea un **Blueprint** nuevo y conecta este repositorio de GitHub.
+2. Antes del primer despliegue, Render solicitará `ADMIN_USERNAME`, `ADMIN_EMAIL` y `ADMIN_PASSWORD`. Complétalos en Render; no los guardes en GitHub.
+3. Espera a que el servicio termine de desplegarse y abre la URL `onrender.com` que Render le asignó. El panel estará en `/admin`.
+
+El servicio usa un disco persistente de 1 GB y el plan Starter para conservar SQLite y las imágenes subidas. Este plan y el disco pueden generar cargos según las tarifas vigentes de Render. La URL de GitHub Pages no ejecuta la API; utiliza la URL del servicio de Render para iniciar sesión.
+
+---
+
 ### 2. Crear o Gestionar el Usuario Administrador
 Por razones de seguridad, las contraseñas nunca se almacenan en texto plano ni se publican en el repositorio. Para crear o actualizar un administrador de forma segura:
 

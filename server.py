@@ -21,7 +21,11 @@ from http.cookies import SimpleCookie
 # Setup directory paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
-UPLOADS_DIR = os.path.join(BASE_DIR, "uploads")
+DATA_DIR = os.environ.get("INNOVA_DATA_DIR", DATA_DIR)
+UPLOADS_DIR = os.environ.get(
+    "INNOVA_UPLOADS_DIR",
+    os.path.join(BASE_DIR, "uploads"),
+)
 ADMIN_DIR = os.path.join(BASE_DIR, "admin")
 
 os.makedirs(DATA_DIR, exist_ok=True)
